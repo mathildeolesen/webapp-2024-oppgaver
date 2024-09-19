@@ -1,5 +1,11 @@
+import Student from "./components/Student";
+
 function App() {
-  return <h1>Start</h1>;
+  return (
+    <main>
+      <Student name="Mathilde" id="123"/>
+    </main>
+  );
 }
 
 export default App;
