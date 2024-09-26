@@ -7,7 +7,7 @@ import { Student } from "./components/types";
 const initialStudents = [
   { id: "1", name: "Mathilde Olesen" },
   { id: "2", name: "Kari Nordmann" },
-  { id: "2", name: "Ola Nordmann" }
+  { id: "3", name: "Ola Nordmann" }
 ]
 
 
@@ -34,9 +34,13 @@ function App() {
     // som vi ikke har kontroll på
   }
 
+  const onRemoveStudent = (id: string) => {
+    setStudents(prev => prev.filter(student => student.id !== id))
+  }
+
   return (
     <main>
-      <Grid students={students} onAddStudent={onAddStudent}/>
+      <Grid students={students} onAddStudent={onAddStudent} onRemoveStudent={onRemoveStudent}/>
       <Total total={students.length}/>
     </main>
   );
