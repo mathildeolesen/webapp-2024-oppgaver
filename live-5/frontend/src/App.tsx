@@ -24,7 +24,7 @@ function App() {
     // Denne funksjonen kan du bruke for å oppdatere listen din -> setStudents
     // (setStudents er basert på en intern funksjon i useState)
 
-  const onAddStudent = (student: {name: string} ) => {
+  const onAddStudent = (student: Omit<Student, "id"> ) => {
     setStudents((prev) => [...prev, {id: crypto.randomUUID(), ...student }]);
     // (prev) -> staten sånn som den *var*
     // ...prev -> sprer dem som var der allerede ut
