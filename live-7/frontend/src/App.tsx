@@ -3,6 +3,7 @@ import Grid from "./components/Grid";
 import Total from "./components/Total";
 import { Student } from "./components/types";
 import AddStudentForm from "./components/AddStudentForm";
+import Filter from "./components/Filter";
 
 
 const initialStudents = [
@@ -39,10 +40,48 @@ function App() {
     setStudents(prev => prev.filter(student => student.id !== id))
   }
 
+  const [filter, setFilter] = useState("-");
+
+  const onFilterChange = (filter: string) => {
+    setFilter(filter);
+  }
+
+  // const options = Array.from(
+  //   new Set(
+  //     students.map((student) => student.name.trim().split(" ")[0].toLowerCase())
+  //   )
+  // );
+
+  const options = Array.from(
+    students
+      .reduce((acc, student: Student) => {
+        const name = student.name.trim().split(" ")[0];
+        if (acc.has(name)) return acc;
+
+        return acc.set(name, {
+          ...student,
+          value: name.toLowerCase(),
+          label: name,
+        });
+      }, new Map())
+      .values()
+  );
+
+  const filteredStudents = students.filter(student => 
+    filter !== '-' ? student.name.toLowerCase().includes(filter) : true
+  )
+
   return (
     <main>
+      <Filter 
+        filter={filter} 
+        onFilterChange={onFilterChange} 
+        options={Object.values(options)}
+        /* options gir oss => [[key, {}], [key, {}] (en Array med Map-par)]
+            Object.values(options gir oss -> [{}, {}, {}]*/
+        />
       <Grid 
-        students={students} 
+        students={filteredStudents} 
         // onAddStudent={onAddStudent} 
         onRemoveStudent={onRemoveStudent}
       >
