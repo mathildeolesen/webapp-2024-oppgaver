@@ -1,17 +1,18 @@
 
 import Student from "./Student"
 import { Student as StudentProps } from "./types";
-import AddStudentForm from "./AddStudentForm";
+// import AddStudentForm from "./AddStudentForm";
+import { PropsWithChildren } from "react";
 
 type GridProps = {
     students: StudentProps[];
-    onAddStudent: ({ name } : { name: string }) => void; 
+    // onAddStudent: ({ name } : { name: string }) => void; 
     onRemoveStudent: (id: string) => void;
 }
 
-export default function Grid(props: GridProps) {
+export default function Grid(props: PropsWithChildren<GridProps>) {
 
-   const { students, onAddStudent, onRemoveStudent } = props;
+   const { students, onRemoveStudent, children } = props;
 
     return (
         <section>
@@ -23,7 +24,8 @@ export default function Grid(props: GridProps) {
                     // <-- Vet ikke hva vi sender videre, men slipper å forandre navn mange steder
                 ))}
             </article>
-            <AddStudentForm onAddStudent={onAddStudent}/>
+            {children}
+            {/*<AddStudentForm onAddStudent={onAddStudent}/>*/}
         </section>
     )
 }

@@ -2,6 +2,7 @@ import { useState } from "react";
 import Grid from "./components/Grid";
 import Total from "./components/Total";
 import { Student } from "./components/types";
+import AddStudentForm from "./components/AddStudentForm";
 
 
 const initialStudents = [
@@ -40,7 +41,13 @@ function App() {
 
   return (
     <main>
-      <Grid students={students} onAddStudent={onAddStudent} onRemoveStudent={onRemoveStudent}/>
+      <Grid 
+        students={students} 
+        // onAddStudent={onAddStudent} 
+        onRemoveStudent={onRemoveStudent}
+      >
+        <AddStudentForm onAddStudent={onAddStudent}/>
+      </Grid>
       <Total total={students.length}/>
     </main>
   );
