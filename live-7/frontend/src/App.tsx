@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Grid from "./components/Grid";
 import Total from "./components/Total";
 import { Student } from "./components/types";
@@ -15,6 +15,9 @@ const initialStudents = [
 
 
 function App() {
+
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState("")
 
   const [students, setStudents] = useState<Student[]>(initialStudents ?? [])
   // React hjelper  å holde kontroll på tilstanden
@@ -70,6 +73,33 @@ function App() {
   const filteredStudents = students.filter(student => 
     filter !== '-' ? student.name.toLowerCase().includes(filter) : true
   )
+
+  useEffect(() => {
+    // Her skjer det noe
+    const fetchStudents = async () => {
+      try {
+        setLoading(true) // Kan fortelle at noe skjer, noe er på vei... kan trigge loading hjul f.eks
+        // TODO: No hardcoded url. Move to config in config/index.ts
+        const response = await fetch("http://localhost:3999/api/students")
+        const data = await response.json()
+        setStudents(data); 
+        // Forventer her at data er en ren liste [] og ikke f.eks {data: studentList} (Da må vi data.data)
+      } catch (error) {
+        console.error(error); // Tar ikke med i produksjon, men i utvikling så er det fint.
+        // TODO: No hardcoded Strings. Have them in a config. What if we want to change language?
+        setError("Feilet ved henting av studenter")
+      } finally {
+        // Skjer alltid
+        setLoading(false) // Nå skjer det ikke noe lenger -> stoppe loading hjul
+      }
+    }; 
+
+    fetchStudents();
+
+  }, [/* Hva skal trigge useEffecten */])
+  // useEffect bruksområder: 
+  // Laste inn data når komponenten lastes inn for første gang
+
 
   return (
     <main>
