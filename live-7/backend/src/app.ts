@@ -1,5 +1,7 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
+import { isNameValid } from "./lib/validators";
+import { Result, Student } from "./types";
 
 const app = new Hono();
 
@@ -52,8 +54,30 @@ app.get('/api/students/:id', (c) => {
 app.post('/api/students', async (c) => {
   const data = await c.req.json();
   const { name } = data;
+  
+  if (!isNameValid(name)) 
+    //return c.json({ success: false, error: "Invalid name" }, { status: 400 });
+    return c.json<Result<null>>(
+      {
+        success: false,
+        error: {
+          code: "INVALID_NAME",
+          message: "Invalid name",
+        },
+      },
+      { status: 400 }
+    );
+
   students.push({ id: crypto.randomUUID(), name });
-  return c.json(students, {status: 201 });
+  
+  //return c.json({ success: true, data: students }, {status: 201 });
+  return c.json<Result<Student[]>>(
+    {
+      success: true,
+      data: students
+    }
+  )
+
 })
 
 
